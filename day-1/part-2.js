@@ -32,14 +32,14 @@ console.log(calibrationValues.reduce((prev, curr) => prev + curr, 0));
  * @returns {string} - The extracted number as a string.
  */
 function getNumber(line, wordToNumbers) {
-  let numberAsString = '';
+  let currentNumberString = '';
 
   for (let i = 0; i < line.length; ++i) {
-    numberAsString += line[i];
+    currentNumberString += line[i];
 
-    if (hasNumberRepresentation(numberAsString, wordToNumbers)) {
-      return getNumberRepresentation(numberAsString, wordToNumbers);
-    }
+    const numberAsString = findNumberRepresentation(currentNumberString, wordToNumbers);
+
+    if (numberAsString) return numberAsString;
   }
 
   return '';
@@ -53,39 +53,27 @@ function getNumber(line, wordToNumbers) {
  * @returns {string} - The extracted number as a string.
  */
 function getNumberReversed(line, wordToNumbers) {
-  let numberAsString = '';
+  let currentNumberString = '';
 
   for (let i = line.length - 1; i >= 0; --i) {
-    numberAsString = line[i] + numberAsString;
+    currentNumberString = line[i] + currentNumberString;
 
-    if (hasNumberRepresentation(numberAsString, wordToNumbers)) {
-      return getNumberRepresentation(numberAsString, wordToNumbers);
-    }
+    const numberAsString = findNumberRepresentation(currentNumberString, wordToNumbers);
+
+    if (numberAsString) return numberAsString;
   }
 
   return '';
 }
 
 /**
- * Checks if the given string has a valid number representation based on the provided mapping.
+ * Finds the number representation from the given string based on the provided mapping.
  *
  * @param {string} str - The string to check for a number representation.
  * @param {Map<string, string>} wordToNumbers - The mapping of words to their corresponding numeric representations.
- * @returns {boolean} - True if a valid representation is found, false otherwise.
+ * @returns {string} - The extracted number representation or an empty string if not found.
  */
-function hasNumberRepresentation(str, wordToNumbers) {
-  return Array.from(wordToNumbers.keys()).some(word => str.includes(word)) ||
-    Array.from(wordToNumbers.values()).some(digit => str.includes(digit));
-}
-
-/**
- * Gets the number representation from the given string based on the provided mapping.
- *
- * @param {string} str - The string to extract the number representation from.
- * @param {Map<string, string>} wordToNumbers - The mapping of words to their corresponding numeric representations.
- * @returns {string} - The extracted number representation.
- */
-function getNumberRepresentation(str, wordToNumbers) {
+function findNumberRepresentation(str, wordToNumbers) {
   for (const [word, digit] of wordToNumbers) {
     if (str.includes(word) || str.includes(digit)) {
       return digit;
