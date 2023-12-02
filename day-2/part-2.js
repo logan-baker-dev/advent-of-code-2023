@@ -17,8 +17,8 @@ for (const game of gameInfoParsed) {
   const maxBlueCubes = game.cubes.filter((cube) => cube.color === 'blue')
     .reduce((max, cube) => Math.max(max, cube.number), Number.MIN_SAFE_INTEGER);
 
-  const powerSum = maxRedCubes * maxGreenCubes * maxBlueCubes;
-  sumOfPowers += powerSum;
+  const power = maxRedCubes * maxGreenCubes * maxBlueCubes;
+  sumOfPowers += power;
 }
 
 console.log(sumOfPowers);

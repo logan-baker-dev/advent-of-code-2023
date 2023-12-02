@@ -12,13 +12,14 @@ const gameInfoParsed = parseGameInfo(gameInfo);
 let sumOfValidGameIds = 0;
 
 for (const game of gameInfoParsed) {
-  const redCubes = game.cubes.filter((cube) => cube.color === 'red');
-  const greenCubes = game.cubes.filter((cube) => cube.color === 'green');
-  const blueCubes = game.cubes.filter((cube) => cube.color === 'blue');
+  const doesExceedRedLimit = game.cubes.filter((cube) => cube.color === 'red')
+    .some((cube) => cube.number > redLimit);
 
-  const doesExceedRedLimit = redCubes.some((cube) => cube.number > redLimit);
-  const doesExceedGreenLimit = greenCubes.some((cube) => cube.number > greenLimit);
-  const doesExceedBlueLimit = blueCubes.some((cube) => cube.number > blueLimit);
+  const doesExceedGreenLimit = game.cubes.filter((cube) => cube.color === 'green')
+    .some((cube) => cube.number > greenLimit)
+
+  const doesExceedBlueLimit = game.cubes.filter((cube) => cube.color === 'blue')
+    .some((cube) => cube.number > blueLimit)
 
   if (doesExceedRedLimit || doesExceedGreenLimit || doesExceedBlueLimit) {
     continue;
