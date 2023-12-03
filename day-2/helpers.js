@@ -7,7 +7,7 @@ import Cube from './Cube.js';
  * @param {string[]} gameInfo - The game information.
  * @returns {Game[]} - An array of Game objects representing the game information.
  */
-export function parseGameInfo(gameInfo) {
+export function parseGameInfoIntoGames(gameInfo) {
   const parsedGameInfo = [];
 
   for (const gameString of gameInfo) {
@@ -43,4 +43,33 @@ export function parseCubes(cubeString) {
   }
 
   return parsedCubes;
+}
+
+/**
+ * Checks if any of the game's cubes exceed the color limits.
+ * 
+ * @param {Game} game - The game object.
+ * @returns {boolean} - True if the game exceeds any color limits, false otherwise.
+ */
+export function doesGameExceedColorLimits(game) {
+  const colorLimits = new Map([
+    ['red', 12],
+    ['green', 13],
+    ['blue', 14]
+  ]);
+
+  return game.cubes.some((cube) => cube.number > colorLimits.get(cube.color));
+}
+
+/**
+ * Returns the cube number with the highest value based on the color of the cube.
+ * 
+ * @param {Cube[]} cubes - The array of cubes.
+ * @param {string} color - The color to filter on.
+ */
+export function getMaxCubeNumberForColor(cubes, color) {
+  const cubeNumbersByColor = cubes.filter(cube => cube.color === color)
+    .map(cube => cube.number);
+
+  return Math.max(...cubeNumbersByColor);
 }
