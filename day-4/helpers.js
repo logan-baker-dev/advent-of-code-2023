@@ -2,44 +2,22 @@
 /**
  * Parses the ticket string into a card object.
  *
- * @param {string} ticket - The ticket in string format.
- * @param {number} index - The current iteration number.
+ * @param {string} ticketString - The ticket in string format.
  * @returns A card object.
  */
-export function createCard(ticket, index) {
-  const [pickedNumbersAsString, winningNumbersAsString] = ticket.substring(ticket.indexOf(':') + 1)
+export function createCard(ticketString) {
+  const [pickedNumberString, winningNumberString] = ticketString.substring(ticketString.indexOf(':') + 1)
     .trim()
     .split(' | ');
 
-  const pickNumbers = parsedNumbersFromString(pickedNumbersAsString);
-  const winningSet = new Set(parsedNumbersFromString(winningNumbersAsString));
+  const pickedNumbers = parsedNumbersFromString(pickedNumberString);
+  const winningSet = new Set(parsedNumbersFromString(winningNumberString));
 
   return {
-    id: index + 1,
-    pickNumbers,
+    count: 1,
+    pickedNumbers,
     winningSet
   };
-}
-
-/**
- * Adds copies of a card to a map, updating the counts based on matching numbers.
- *
- * @param {Map<number, number>} cardCopies - The map containing card ID counts.
- * @param {{
- * id: number,
- * pickNumbers: number[],
- * winningSet: Set<number>
- * }} card - The card object with an `id` property.
- * @param {number} matchingNumbers - The number of matching numbers for the card.
- * @returns {void} This function modifies the provided `cardCopies` map in place.
- */
-export function addCardCopies(cardCopies, card, matchingNumbers) {
-  for (let i = 0; i < matchingNumbers; ++i) {
-    const id = card.id + i + 1;
-    const count = cardCopies.get(id) ?? 0;
-
-    cardCopies.set(id, count + 1);
-  }
 }
 
 /**

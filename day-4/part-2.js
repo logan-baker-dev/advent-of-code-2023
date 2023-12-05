@@ -1,32 +1,22 @@
 import { readFileSync } from 'fs';
-import { createCard, addCardCopies } from './helpers.js';
+import { createCard } from './helpers.js';
 
 const inputFilePath = './day-4/input.txt';
 const cards = readFileSync(inputFilePath, 'utf-8')
   .split('\r\n')
-  .map((ticket, index) => createCard(ticket, index));
+  .map(ticket => createCard(ticket));
 
-const cardCopies = new Map();
+for (let i = 0; i < cards.length; ++i) {
+  const card = cards[i];
+  const matchingNumberCount = card.pickedNumbers
+    .reduce((sum, pick) => card.winningSet.has(pick) ? sum + 1 : sum, 0);
 
-for (const card of cards) {
-  const matchingNumbers = card.pickNumbers.reduce(
-    (sum, pick) => card.winningSet.has(pick) ? sum + 1 : sum,
-    0);
-
-  if (matchingNumbers === 0) continue;
-
-  addCardCopies(cardCopies, card, matchingNumbers);
-
-  const duplicateCardCount = cardCopies.get(card.id) ?? 0;
-
-  for (let i = 0; i < duplicateCardCount; ++i) {
-    addCardCopies(cardCopies, card, matchingNumbers);
+  // Adjust the count of the next n many cards where n = matchingNumberCount.
+  for (let j = 1; j <= matchingNumberCount; ++j) {
+    const nextCard = cards[i + j];
+    nextCard.count += card.count;
   }
 }
 
-const cardCopyTotals = Array.from(cardCopies.values()).reduce(
-  (sum, count) => sum + count,
-  0);
-
-const totalCards = cards.length + cardCopyTotals;
+const totalCards = cards.reduce((sum, card) => sum + card.count, 0);
 console.log(totalCards);
